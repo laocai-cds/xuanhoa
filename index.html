@@ -1496,6 +1496,7 @@ function start(){
   try{$('#endpoint').value=localStorage.getItem('xh_endpoint')||'';$('#syncToken').value=localStorage.getItem('xh_token')||''}catch(e){}
   const hasEp=!!sheetEndpoint();let cached=null;
   try{cached=JSON.parse(localStorage.getItem('xh_cache')||'null')}catch(_){}
+  if(cached&&(!cached.t||new Date(cached.t).getFullYear()+'-'+new Date(cached.t).getMonth()!==new Date().getFullYear()+'-'+new Date().getMonth())){cached=null;try{localStorage.removeItem('xh_cache')}catch(_){}}/* bỏ số liệu lưu tạm của tháng trước */
   if(hasEp&&cached&&Array.isArray(cached.headers)&&applySheet({ok:true,headers:cached.headers,rows:cached.rows,lastSync:cached.lastSync,t:cached.t})){dataSrc='cache'}
   else{dataSrc=hasEp?'loading':'backup';if(hasEp)setLoading(true);else showBackupNote(true)}
   render();
