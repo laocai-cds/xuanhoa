@@ -945,6 +945,7 @@ go();document.addEventListener('DOMContentLoaded',go);
       <button class="btn" id="reportBtn" title="Tạo báo cáo (In/PDF, Excel, Word)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2.5" class="f"/><path d="M9 3h6v3H9z"/><path d="M9 17v-3M12 17v-5M15 17v-2"/></svg><span class="lbl">Tạo báo cáo</span></button>
       <button class="btn" id="exportBtn" title="Xuất bảng tính Excel"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4" width="17" height="16" rx="2.5" class="f"/><path d="M3.5 9.5h17M9.5 9.5V20"/><path d="M15 13v4m0 0l-1.6-1.6M15 17l1.6-1.6"/></svg><span class="lbl">Xuất Excel</span></button>
       <button class="btn" id="loginBtn" type="button" title="Đăng nhập quản trị bằng Gmail"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4" class="f"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0z" class="f"/></svg><span class="lbl" id="loginLbl">Đăng nhập</span></button>
+      <button class="tab admin-only adm-bottom" data-page="import"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.2 8.3-8 9-4.8-.7-8-4.5-8-9V6z"/><path d="m9 12 2 2 4-4"/></svg><span>Quản trị</span></button>
     </div>
   </div>
 </header>
@@ -3747,6 +3748,13 @@ html body .podium .step .meta b{font-weight:700;color:#22331f}
 html body .podium .step .go{display:inline-flex;align-items:center;gap:5px;font:700 12px var(--sans);color:var(--c);border:0;padding:0;margin:0}
 html body .podium .step:hover .go svg{transform:translateX(4px)}html body .podium .step .go svg{transition:transform .2s}
 @media(max-width:900px){html body .podium{grid-template-columns:1fr!important;gap:10px!important}}
+</style>
+<style id="xh-barright-up">
+@media(min-width:901px){
+html body .bar .tabs .tab[data-page=import]:not(.adm-bottom){display:none!important}
+html body .bar .barright{margin-top:clamp(10px,2.4vh,24px)!important}
+}
+@media(max-width:900px){html body .adm-bottom{display:none!important}}
 </style>
 </body>
 </html>
