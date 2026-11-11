@@ -3648,5 +3648,11 @@ html body .scenic .scenic-title{position:absolute;left:clamp(14px,2.6vw,40px);bo
 html body .scenic .scenic-title .l1{display:block;color:#fff;font-size:clamp(34px,5.2vw,76px)}
 html body .scenic .scenic-title .l2{display:block;color:#eaffc4;text-shadow:0 1px 3px rgba(0,0,0,.75),0 0 14px rgba(0,0,0,.6);font-size:clamp(20px,2.9vw,42px);margin:-.1em 0 0 1.5em}
 </style>
+<style id="xh-trongdong">
+@keyframes xhSpin{to{transform:rotate(360deg)}}
+html body .hero .wrap>div:first-child::before{display:block!important;content:""!important;position:absolute!important;right:-70px!important;left:auto!important;top:50%!important;width:330px!important;height:330px!important;margin:-165px 0 0!important;background:url(trong-dong.png) center/contain no-repeat!important;opacity:.2!important;pointer-events:none;z-index:0;will-change:transform;animation:xhSpin 28s linear infinite}
+html body .hero .wrap>div:first-child>*{position:relative;z-index:1}
+@media(max-width:700px){html body .hero .wrap>div:first-child::before{width:240px!important;height:240px!important;margin:-120px 0 0!important;right:-60px!important}}
+</style>
 </body>
 </html>
