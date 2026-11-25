@@ -2420,7 +2420,7 @@ function apiBookmarklet(C){
   window.__dpBmBusy=true;
   go(false).finally(()=>{window.__dpBmBusy=false;badge(hm())});
 }
-function apiBmSrc(){return '('+apiBookmarklet.toString()+')('+JSON.stringify({pid:2122408,name:'Đảng bộ xã Xuân Hòa',max:0,k:'xh_apipw',src:'website-xuan-hoa-api',m:true,sub:'^đảng bộ\\s+trường\\b',tt:'https://script.google.com/macros/s/AKfycbzM63_09XGNRPq8S6lcItzJRnb8BjwL4f-EBN-FZA_wbIbEUBQ7MBApN7GHwAdYH82kbw/exec',ep:(sheetEndpoint())||''})+');void 0'}
+function apiBmSrc(){return '('+apiBookmarklet.toString()+')('+JSON.stringify({pid:2122408,name:'Đảng bộ xã Xuân Hòa',max:0,k:'xh_apipw',src:'website-xuan-hoa-api',m:true,sub:'^đảng bộ\\s+trường\\b',ep:(sheetEndpoint())||''})+');void 0'}
 (function(){
   const a=document.getElementById('apiBm'),c=document.getElementById('apiCopy'),cj=document.getElementById('apiCopyJs'),m=document.getElementById('apiMsg');if(!a)return;
   const say=t=>{m.hidden=false;m.textContent=t};
