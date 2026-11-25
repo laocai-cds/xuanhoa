@@ -2387,6 +2387,20 @@ function apiBookmarklet(C){
           subMsg='\nChi bộ trực thuộc đảng bộ trường: '+nSub+' chi bộ của '+nSch+'/'+schools.length+' đảng bộ'+(errs.length?' (chưa thấy chi bộ con: '+errs.length+' đảng bộ)':'');
         }else subMsg='\nChi bộ trực thuộc đảng bộ trường: chưa lấy được chi bộ con nào ('+schools.length+' đảng bộ trường)';
       }catch(e3){subMsg='\n⚠ Chưa lấy được chi bộ con của đảng bộ trường ('+(e3&&e3.message||e3)+') — đồng bộ chính vẫn xong.'}}
+      let ttMsg='';
+      if(ok&&C.tt&&me){try{/* đẩy luôn hàng của chính đơn vị sang Sheet tthc để bảng xếp hạng tthc khớp ngay */
+        let tpw='',fresh=false;try{tpw=localStorage.getItem('dangphi.token')||''}catch(e){}
+        if(!tpw&&!auto){tpw=(prompt('Mã đồng bộ của site TTHC (để cập nhật bảng xếp hạng tthc). Bỏ trống nếu chưa cần:')||'').trim();fresh=!!tpw}
+        if(tpw){
+          say('Đang cập nhật hàng của '+C.name+' sang Sheet TTHC…',false,true);
+          const trow=[0,String(me.tenDonVi||C.name).trim(),n(me.tongSoLuongDangVien),n(me.soLuongDangVienChinhThuc),n(me.soLuongDangVienTamThoi),n(me.soLuongChuyenTamThoi),n(me.soLuongDangVienMienGiam),n(me.tongSoHoSoChuaDuyet),n(me.tongSoHoSoDaDuyetChuaNop),n(me.tongSoHoSoDaDuyetDaNop),n(me.soLuongHoSoChuaKhaiBao),n(me.tongSoTienDaKhaiBao),n(me.tongSoTienDaNop),n(me.mucDoThucHien)],tm=cy+'-'+p2(SM);
+          await fetch(C.tt,{method:'POST',mode:'no-cors',redirect:'follow',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({token:tpw,source:'unit-row',month:tm,syncId:'unit-'+Date.now(),unit:{row:trow}})});
+          let tok=null;
+          for(let k=0;k<8&&!tok;k++){await new Promise(r2=>setTimeout(r2,1000));const x=await jp(C.tt+'?action=unit&month='+tm+'&name='+encodeURIComponent(C.name),9000);if(x&&x.ok&&x.row&&Number(x.row[9])===trow[9]&&Number(x.row[12])===trow[12])tok=x}
+          if(tok){ttMsg='\nTTHC: đã cập nhật hàng '+C.name+' ('+n(me.tongSoHoSoDaDuyetDaNop)+' đã nộp).';if(fresh){try{localStorage.setItem('dangphi.token',tpw)}catch(e){}}}
+          else ttMsg='\n⚠ TTHC: chưa xác nhận được (sai mã đồng bộ TTHC, hoặc Apps Script TTHC chưa triển khai bản mới).'
+        }
+      }catch(e4){ttMsg='\n⚠ TTHC: chưa cập nhật được ('+(e4&&e4.message||e4)+') — đồng bộ chính vẫn xong.'}}
       if(ok&&C.m){say('Đang cập nhật tab “Thu theo tháng”…',false,true);
         const MK=cy+'-'+String(SM).padStart(2,'0'),paid=rows.slice(1).reduce((a,r)=>a+(Number(r[12])||0),0);
         const x=await jp(C.ep+'?action=read&tab='+encodeURIComponent('Thu theo tháng'),9000);
@@ -2396,7 +2410,7 @@ function apiBookmarklet(C){
       if(ok){try{localStorage.setItem(C.k,pw)}catch(e){}}else{try{localStorage.removeItem(C.k)}catch(e){}}
       const apiT=tC-tA,nc=navigator.connection||{};
       const speed=apiT<2500?'🟢 Nhanh':apiT<6000?'🟡 Bình thường':'🔴 Chậm';
-      const detail=subMsg+(window.__dpBmTimer?'\n⏱ Tự động lặp mỗi '+AM+' phút — giữ tab này mở; tải lại trang sẽ dừng.':'')+'\n⏱ Tổng '+f1(tF-T0)+' · Kết nối '+speed+'\nAPI '+f1(apiT)+' (chờ '+f1(tB-tA)+', tải '+Math.max(1,Math.round(raw.length/1024))+' KB) · Gửi Sheet '+f1(tE-tD)+' · Xác nhận '+f1(tF-tE)+(nc.effectiveType?'\nMạng: '+nc.effectiveType+(nc.rtt?' · rtt '+nc.rtt+' ms':''):'');
+      const detail=subMsg+ttMsg+(window.__dpBmTimer?'\n⏱ Tự động lặp mỗi '+AM+' phút — giữ tab này mở; tải lại trang sẽ dừng.':'')+'\n⏱ Tổng '+f1(tF-T0)+' · Kết nối '+speed+'\nAPI '+f1(apiT)+' (chờ '+f1(tB-tA)+', tải '+Math.max(1,Math.round(raw.length/1024))+' KB) · Gửi Sheet '+f1(tE-tD)+' · Xác nhận '+f1(tF-tE)+(nc.effectiveType?'\nMạng: '+nc.effectiveType+(nc.rtt?' · rtt '+nc.rtt+' ms':''):'');
       say(ok?'✅ HOÀN THÀNH — đã đồng bộ '+list.length+' đơn vị tháng '+SM+'/'+cy+' lên Google Sheet ('+T+').'+detail:'Đã gửi '+list.length+' đơn vị nhưng chưa thấy Google Sheet cập nhật. Kiểm tra mã đồng bộ rồi bấm lại (sẽ hỏi lại mã).'+detail,!ok,false,!!ok);
       setTimeout(()=>box.remove(),auto?6000:ok?25000:30000);
     }catch(e){say('✕ '+(e&&e.name==='AbortError'?'API phản hồi quá chậm (quá 90 giây, đã thử 2 lần). Kiểm tra mạng rồi bấm lại.':e.message)+'   (sau '+f1(performance.now()-T0)+')',true);setTimeout(()=>box.remove(),auto?15000:20000)}
@@ -2404,7 +2418,7 @@ function apiBookmarklet(C){
   window.__dpBmBusy=true;
   go(false).finally(()=>{window.__dpBmBusy=false;badge(hm())});
 }
-function apiBmSrc(){return '('+apiBookmarklet.toString()+')('+JSON.stringify({pid:2122408,name:'Đảng bộ xã Xuân Hòa',max:0,k:'xh_apipw',src:'website-xuan-hoa-api',m:true,sub:'^đảng bộ\\s+trường\\b',ep:(sheetEndpoint())||''})+');void 0'}
+function apiBmSrc(){return '('+apiBookmarklet.toString()+')('+JSON.stringify({pid:2122408,name:'Đảng bộ xã Xuân Hòa',max:0,k:'xh_apipw',src:'website-xuan-hoa-api',m:true,sub:'^đảng bộ\\s+trường\\b',tt:'https://script.google.com/macros/s/AKfycbym3FHqtE20kg8F3SCuc6LizXSwGhSFT-KBY90c58BuOuRigFbOdyruPkTx4uBscZ-ibw/exec',ep:(sheetEndpoint())||''})+');void 0'}
 (function(){
   const a=document.getElementById('apiBm'),c=document.getElementById('apiCopy'),cj=document.getElementById('apiCopyJs'),m=document.getElementById('apiMsg');if(!a)return;
   const say=t=>{m.hidden=false;m.textContent=t};
